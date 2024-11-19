@@ -1,0 +1,33 @@
+{
+	"id": "8d436243-126c-43d0-96a2-08ca3a791045",
+	"name": "QA",
+	"values": [
+		{
+			"key": "url",
+			"value": "https://api.restful-api.dev",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "userid",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "password",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "extractedId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2024-11-18T08:53:23.404Z",
+	"_postman_exported_using": "Postman/11.19.0"
+}

@@ -1,0 +1,326 @@
+{
+	"info": {
+		"_postman_id": "b46457e4-3756-458d-b7ea-f36d355d5f93",
+		"name": "Practice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39618961"
+	},
+	"item": [
+		{
+			"name": "listofallobject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Body matches string - ID\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"});\r",
+							"pm.test(\"Body matches string - name\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+							"});\r",
+							"pm.test(\"Body matches string - data\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"});\r",
+							"\r",
+							"pm.test('Validate number of records', function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"   pm.expect(jsonData.length).to.eql(13);\r",
+							"});\r",
+							"\r",
+							"pm.test('Validate color and capacity', function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"   pm.expect(jsonData[2].data.color).to.eql(\"Cloudy White\");\r",
+							"   pm.expect(jsonData[2].data[\"capacity GB\"]).to.eql(512);\r",
+							"});\r",
+							"\r",
+							"pm.test('Count number of id field in the response', function () {\r",
+							"   // var jsonData = pm.response.json();\r",
+							"    var ids = pm.response.json(\"$[*].id\");\r",
+							"    var idcount = ids.length;\r",
+							"    console.log('Number of \"id\" fields:' + idcount);\r",
+							"    pm.expect(idcount).to.eql(13);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/objects",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"objects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "searchbyid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/objects?id=3&id=5&id=10",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"objects"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "3"
+						},
+						{
+							"key": "id",
+							"value": "5"
+						},
+						{
+							"key": "id",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "singleobject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"product name validation\", function () {\r",
+							" var jsonData = pm.response.json();\r",
+							" pm.expect(jsonData.name).to.eql(pm.variables.get(\"SearchName\"));\r",
+							" });"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/objects/{{SearchID}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"objects",
+						"{{SearchID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addobject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"var idValue = jsonData.id;\r",
+							"pm.environment.set(\"extractedId\",idValue);\r",
+							"console.log(\"The extracted value:\" + idValue);\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"product name validation\", function () {\r",
+							" var jsonData = pm.response.json();\r",
+							" pm.expect(jsonData.name).to.eql(pm.variables.get(\"name\"));\r",
+							" });\r",
+							"\r",
+							" pm.test(\"product name validation\", function () {\r",
+							" var jsonData = pm.response.json();\r",
+							" pm.expect(jsonData.data.price).to.eql(pm.variables.get(\"price\"));\r",
+							" });\r",
+							"\r",
+							" pm.test(\"product name validation\", function () {\r",
+							" var jsonData = pm.response.json();\r",
+							" pm.expect(jsonData.data.year).to.eql(pm.variables.get(\"year\"));\r",
+							" });"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"name\": \"{{name}}\",\r\n   \"data\": {\r\n      \"year\": {{year}},\r\n      \"price\": {{price}},\r\n      \"CPU model\": \"Intel Core i9\",\r\n      \"Hard disk size\": \"1 TB\",\r\n      \"RAM size\": \"542 MB\"\r\n   }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/objects",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"objects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n    \"name\": \"Apple MacBook Pro 20\",\r\n    \"createdAt\": \"2024-11-11T12:06:41.991+00:00\",\r\n    \"data\": {\r\n        \"year\": 2019,\r\n        \"price\": 1849.99,\r\n        \"CPU model\": \"Intel Core i9\",\r\n        \"Hard disk size\": \"1 TB\",\r\n        \r\n        \"color\": \"silver\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/objects/{{extractedId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"objects",
+						"{{extractedId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "partialupdate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"name\": \"Apple MacBook Pro 25\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/objects/{{extractedId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"objects",
+						"{{extractedId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/objects/{{extractedId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"objects",
+						"{{extractedId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
